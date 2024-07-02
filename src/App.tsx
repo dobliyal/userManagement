@@ -5,11 +5,13 @@ import RegisterPage from './components/RegisterPage';
 import ProfilePage from './components/ProfilePage';
 import UserListPage from './components/ UserListPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Navbar from './components/Navbar';
 
 const App: React.FC = () => {
     return (
         <AuthProvider>
             <Router>
+              <Navbar/>
                 <Routes>
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />

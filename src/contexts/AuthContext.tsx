@@ -8,6 +8,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [adminCount, setAdminCount] = useState<number>(0);
+    const[userCount,setuserCount]=useState<number>(0);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -27,14 +28,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         fetchAdminCount();
     }, []);
 
+    useEffect(() => {
+        const fetchUserCount = async () => {
+            const users = await localforage.getItem<User[]>('users') || [];
+            const userCount = users.filter(user => user.roleType === 'user').length;
+            setuserCount(userCount);
+        };
+        fetchUserCount();
+    }, []);//
+
     const login = (username: string, password: string, roleType: 'admin' | 'user') => {
         return new Promise<void>((resolve, reject) => {
             setTimeout(async () => {
                 const users = await localforage.getItem<User[]>('users') || [];
                 const foundUser = users.find(user => user.username === username && user.password === password && user.roleType === roleType);
                 if (foundUser) {
+                    await localforage.setItem('user', foundUser); 
                     setUser(foundUser);
-                    await localforage.setItem('user', foundUser);
                     resolve();
                 } else {
                     reject('Invalid credentials');
@@ -42,6 +52,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             }, 2000);
         });
     };
+    
 
     const logout = async () => {
         await localforage.removeItem('user');
@@ -49,19 +60,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     const register = async (newUser: User) => {
-        if (newUser.roleType === 'admin' && adminCount >= 1) {
-            throw new Error('Only one admin is allowed');
-        }
+    
         const users = await localforage.getItem<User[]>('users') || [];
         users.push(newUser);
         await localforage.setItem('users', users);
         if (newUser.roleType === 'admin') {
             setAdminCount(adminCount + 1);
         }
+        else if(newUser.roleType==='user'){
+            setuserCount(userCount+1);
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading, register, adminCount }}>
+        <AuthContext.Provider value={{ user, login, logout, loading, register, adminCount,userCount }}>
             {children}
         </AuthContext.Provider>
     );

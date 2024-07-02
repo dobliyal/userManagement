@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useForm } from '../hooks/useForm';
 import { useRegister } from '../hooks/useRegister';
 import { useNavigate } from 'react-router-dom';
 import { RegisterForm } from '../types';
 import { useAuth } from '../contexts/AuthContext';
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuidv4 } from 'uuid';
+import {
+    Container,
+    Typography,
+    TextField,
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Alert,
+    Box,
+    CircularProgress
+} from '@mui/material';
 
 const RegisterPage: React.FC = () => {
-    const { register, loading, error } = useRegister();
-    const { adminCount } = useAuth(); 
+    const { register, error } = useRegister();
+    const { adminCount, userCount } = useAuth();
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { values, handleChange } = useForm<RegisterForm>({
+    const { values, handleChange, setValues } = useForm<RegisterForm>({
         username: '',
         password: '',
         roleType: 'user',
@@ -20,52 +34,118 @@ const RegisterPage: React.FC = () => {
         phoneNumber: ''
     });
 
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        handleChange(e);
+    };
+
+    const handleSelectChange = (e: ChangeEvent<{ name?: string | undefined; value: unknown }>) => {
+        const { name, value } = e.target;
+        setValues({ ...values, [name as string]: value as string });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newUser = { ...values, id: uuidv4() }; 
+        setIsSubmitting(true);
+        const newUser = { ...values, id: uuidv4() };
         try {
-            await register(newUser, adminCount);
+            await new Promise((resolve) => setTimeout(resolve, 2000)); 
+            await register(newUser, adminCount, userCount);
             navigate('/login');
         } catch (err) {
             console.error('Registration error:', err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
-        <div>
-            <h2>Register</h2>
-            {error && <p>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username</label>
-                    <input name="username" value={values.username} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Password</label>
-                    <input type="password" name="password" value={values.password} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Role</label>
-                    <select name="roleType" value={values.roleType} onChange={handleChange}>
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Name</label>
-                    <input name="name" value={values.name} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Address</label>
-                    <input name="address" value={values.address} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Phone Number</label>
-                    <input name="phoneNumber" value={values.phoneNumber} onChange={handleChange} required />
-                </div>
-                <button type="submit" disabled={loading}>Register</button>
-            </form>
-        </div>
+        <Container maxWidth="sm">
+            <Typography variant="h4" component="h1" gutterBottom>
+                Register
+            </Typography>
+            {error && <Alert severity="error">{error}</Alert>}
+            {isSubmitting && (
+                <Box display="flex" justifyContent="center" mb={2}>
+                    <CircularProgress />
+                    <Typography variant="body1" style={{ marginLeft: '10px' }}>
+                        Loading...
+                    </Typography>
+                </Box>
+            )}
+            {!isSubmitting && (
+                <form onSubmit={handleSubmit}>
+                    <Box mb={2}>
+                        <TextField
+                            fullWidth
+                            label="Username"
+                            name="username"
+                            value={values.username}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Box>
+                    <Box mb={2}>
+                        <TextField
+                            fullWidth
+                            type="password"
+                            label="Password"
+                            name="password"
+                            value={values.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Box>
+                    <Box mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel id="role-label">Role</InputLabel>
+                            <Select
+                                labelId="role-label"
+                                name="roleType"
+                                value={values.roleType}
+                                onChange={(e) => handleSelectChange(e as ChangeEvent<{ name?: string; value: unknown }>)}
+                                required
+                            >
+                                <MenuItem value="user">User</MenuItem>
+                                <MenuItem value="admin">Admin</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box mb={2}>
+                        <TextField
+                            fullWidth
+                            label="Name"
+                            name="name"
+                            value={values.name}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Box>
+                    <Box mb={2}>
+                        <TextField
+                            fullWidth
+                            label="Address"
+                            name="address"
+                            value={values.address}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Box>
+                    <Box mb={2}>
+                        <TextField
+                            fullWidth
+                            label="Phone Number"
+                            name="phoneNumber"
+                            value={values.phoneNumber}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Box>
+                    <Button type="submit" variant="contained" color="primary" fullWidth >
+                        Register
+                    </Button>
+                </form>
+            )}
+        </Container>
     );
 };
 

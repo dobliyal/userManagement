@@ -15,6 +15,8 @@ export interface AuthContextType {
     loading: boolean;
     register: (newUser: User) => Promise<void>;
     adminCount: number; 
+    userCount: number;
+    
 }
 
 export interface RegisterForm {
