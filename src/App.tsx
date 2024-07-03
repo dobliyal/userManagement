@@ -31,7 +31,7 @@ const App: React.FC = () => {
                             </AdminRoute>
                         }
                     />
-                    <Route path="*" element={<Navigate to="/login" />} />
+                    <Route path="*" element={<Navigate to="/register" />} />
                 </Routes>
             </Router>
         </AuthProvider>

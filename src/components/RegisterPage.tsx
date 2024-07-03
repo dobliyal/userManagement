@@ -5,19 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import { RegisterForm } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
-import {
-    Container,
-    Typography,
-    TextField,
-    Button,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Alert,
-    Box,
-    CircularProgress
-} from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const RegisterPage: React.FC = () => {
     const { register, error } = useRegister();
@@ -67,9 +66,7 @@ const RegisterPage: React.FC = () => {
             {isSubmitting && (
                 <Box display="flex" justifyContent="center" mb={2}>
                     <CircularProgress />
-                    <Typography variant="body1" style={{ marginLeft: '10px' }}>
-                        Loading...
-                    </Typography>
+                    
                 </Box>
             )}
             {!isSubmitting && (

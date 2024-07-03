@@ -4,7 +4,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { useForm } from '../hooks/useForm';
 import localforage from 'localforage';
 import { User, ProfileForm } from '../types';
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 const ProfilePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();

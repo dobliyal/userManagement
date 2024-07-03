@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import localforage from 'localforage';
 import { User } from '../types';
 import { Link } from 'react-router-dom';
-import {
-    Container,
-    Typography,
-    List,
-    ListItem,
-    ListItemText,
-    Button,
-    Box
-} from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
 
 const UserListPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);

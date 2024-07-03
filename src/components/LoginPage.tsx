@@ -3,19 +3,18 @@ import { useAuth } from '../contexts/AuthContext';
 import { useForm } from '../hooks/useForm';
 import { useNavigate } from 'react-router-dom';
 import { LoginForm } from '../types';
-import {
-    Container,
-    Typography,
-    TextField,
-    Button,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Alert,
-    Box,
-    CircularProgress
-} from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const LoginPage: React.FC = () => {
     const { login, user, loading } = useAuth();
@@ -110,7 +109,7 @@ const LoginPage: React.FC = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading || isSubmitting}>
+                    <Button type="submit" variant="contained" color="primary" fullWidth >
                         Login
                     </Button>
                 </form>

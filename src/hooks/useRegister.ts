@@ -21,7 +21,6 @@ export const useRegister = () => {
             }
 console.log("1114",adminCount)
             if (newUser.roleType === 'admin' && adminCount >= 1) {
-
                 throw new Error('Only one admin is allowed');
             }
             if (newUser.roleType === 'user' && userCount >= 5) {
