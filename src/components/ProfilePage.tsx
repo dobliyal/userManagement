@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 
 const ProfilePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     const [profile, setProfile] = useState<User | null>(null);
     const { values, handleChange, setValues } = useForm<ProfileForm>({
         username: '',
@@ -23,7 +23,6 @@ const ProfilePage: React.FC = () => {
     });
 
     useEffect(() => {
-        if (loading) return;
         const fetchProfile = async () => {
             const users = await localforage.getItem<User[]>('users') || [];
             const foundUser = users.find(u => u.id === id);
@@ -39,7 +38,7 @@ const ProfilePage: React.FC = () => {
             }
         };
         fetchProfile();
-    }, [id, loading, setValues]);
+    }, [id, setValues]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         handleChange(e);
@@ -53,9 +52,6 @@ const ProfilePage: React.FC = () => {
         setProfile({ ...profile, ...values } as User);
     };
 
-    if (loading) return <p>Loading...</p>;
-
-    if (!profile) return <p>Loading...</p>;
 
     return (
         <Container maxWidth="sm">

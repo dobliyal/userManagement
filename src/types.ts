@@ -12,7 +12,7 @@ export interface AuthContextType {
     user: User | null;
     login: (username: string, password: string, roleType: 'admin' | 'user') => Promise<void>;
     logout: () => Promise<void>;
-    loading: boolean;
+    //loading: boolean;
     register: (newUser: User) => Promise<void>;
     adminCount: number; 
     userCount: number;
@@ -26,6 +26,7 @@ export interface RegisterForm {
     name: string;
     address: string;
     phoneNumber: string;
+    // email: string;
 }
 
 export interface LoginForm {

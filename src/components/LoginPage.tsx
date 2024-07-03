@@ -17,7 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 
 const LoginPage: React.FC = () => {
-    const { login, user, loading } = useAuth();
+    const { login, user } = useAuth();
     const { values, handleChange, setValues } = useForm<LoginForm>({ username: '', password: '', roleType: 'user' });
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,7 +55,6 @@ const LoginPage: React.FC = () => {
         }
     }, [user, navigate]);
 
-    if (loading) return <p>Loading...</p>;
 
     return (
         <Container maxWidth="sm">
@@ -66,9 +65,6 @@ const LoginPage: React.FC = () => {
             {isSubmitting && (
                 <Box display="flex" justifyContent="center" mb={2}>
                     <CircularProgress />
-                    <Typography variant="body1" style={{ marginLeft: '10px' }}>
-                        Loading...
-                    </Typography>
                 </Box>
             )}
             {!isSubmitting && (
@@ -96,7 +92,7 @@ const LoginPage: React.FC = () => {
                     </Box>
                     <Box mb={2}>
                         <FormControl fullWidth>
-                            <InputLabel id="role-label">Role</InputLabel>
+                            <InputLabel id="role-label" style={{ backgroundColor: 'white' }}>Role</InputLabel>
                             <Select
                                 labelId="role-label"
                                 name="roleType"

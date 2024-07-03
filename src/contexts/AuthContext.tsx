@@ -6,7 +6,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    // const [loading, setLoading] = useState<boolean>(true);
     const [adminCount, setAdminCount] = useState<number>(0);
     const[userCount,setuserCount]=useState<number>(0);
 
@@ -14,7 +14,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const fetchUser = async () => {
             const storedUser = await localforage.getItem<User>('user');
             if (storedUser) setUser(storedUser);
-            setLoading(false);
+            // setLoading(false);
         };
         fetchUser();
     }, []);
@@ -35,21 +35,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setuserCount(userCount);
         };
         fetchUserCount();
-    }, []);//
+    }, []);
 
+ 
     const login = (username: string, password: string, roleType: 'admin' | 'user') => {
-        return new Promise<void>((resolve, reject) => {
-            setTimeout(async () => {
+        // setLoading(true);
+        return new Promise<void>(async (resolve, reject) => {
+            try {
                 const users = await localforage.getItem<User[]>('users') || [];
                 const foundUser = users.find(user => user.username === username && user.password === password && user.roleType === roleType);
                 if (foundUser) {
-                    await localforage.setItem('user', foundUser); 
+                    await localforage.setItem('user', foundUser);
                     setUser(foundUser);
                     resolve();
                 } else {
                     reject('Invalid credentials');
                 }
-            }, 2000);
+            } catch (error) {
+                reject(error);
+            } 
         });
     };
     
@@ -73,7 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading, register, adminCount,userCount }}>
+        <AuthContext.Provider value={{ user, login, logout, register, adminCount,userCount }}>
             {children}
         </AuthContext.Provider>
     );

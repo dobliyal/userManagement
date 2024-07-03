@@ -66,7 +66,6 @@ const RegisterPage: React.FC = () => {
             {isSubmitting && (
                 <Box display="flex" justifyContent="center" mb={2}>
                     <CircularProgress />
-                    
                 </Box>
             )}
             {!isSubmitting && (
@@ -94,8 +93,8 @@ const RegisterPage: React.FC = () => {
                     </Box>
                     <Box mb={2}>
                         <FormControl fullWidth>
-                            <InputLabel id="role-label">Role</InputLabel>
-                            <Select
+                        <InputLabel id="role-label" style={{ backgroundColor: 'white' }}>Role</InputLabel>
+                        <Select
                                 labelId="role-label"
                                 name="roleType"
                                 value={values.roleType}
