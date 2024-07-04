@@ -58,7 +58,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <Container maxWidth="sm">
-            <Typography variant="h4" component="h1" gutterBottom>
+            <Typography variant="h4" component="h1" gutterBottom align="center">
                 Login
             </Typography>
             {error && <Alert severity="error">{error}</Alert>}
